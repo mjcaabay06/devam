@@ -115,7 +115,7 @@
 
 										while($pc = $selProdCat->fetch()):
 									?>
-										<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
+										<option value="<?php echo $pc['id'] ?>"><?php echo $pc['category_name'] ?></option>
 									<?php endwhile; ?>
 								</select>
 							</div>

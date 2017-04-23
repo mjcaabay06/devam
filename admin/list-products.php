@@ -203,8 +203,8 @@
 			});
 
 			$(".btn-send").on('click', function(){
-				$(".btn-send span.glyphicon-send").addClass("hidden");
-				$(".btn-send span.glyphicon-refresh").removeClass("hidden");
+				$(this).children("span.glyphicon-send").addClass("hidden");
+				$(this).children("span.glyphicon-refresh").removeClass("hidden");
 				fetchValue($(this).data('code'));
 			});
 		});
@@ -222,8 +222,6 @@
 			var url = "https://www.quandl.com/api/v3/datasets/";
 			var product_code = code;
 			var fullUrl = url + product_code + '.json?' + dateFilter() + '&api_key=v_AVA5kuHqzsnG2XwsiK';
-			$(this).children("span.glyphicon-search").addClass("hidden");
-			$(this).children("span.glyphicon-refresh").removeClass("hidden");
 
 			$.get(fullUrl)
 				.done(function(data){
