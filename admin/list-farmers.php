@@ -75,6 +75,7 @@
 										<th>Name</th>
 										<th>Contact Number</th>
 										<th>Added By</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -92,6 +93,13 @@
 										<td><?php echo $prod['last_name'] . ', ' . $prod['first_name'] ?></td>
 										<td><?php echo $prod['mobile_number'] . ' / ' . $prod['telephone_number'] ?></td>
 										<td><?php echo $user['username'] ?></td>
+										<td><a href="edit-farmer.php?fid=<?php echo $prod['id'] ?>" class="btn btn-primary" data-id="">
+												<span class="glyphicon glyphicon-pencil"></span>
+											</a>
+											<button type="button" class="btn btn-primary btn-del" data-id="<?php echo $prod['id'] ?>" data-type="farmer">
+												<span class="glyphicon glyphicon-trash"></span>
+											</button>
+										</td>
 									</tr>
 									<?php endwhile; ?>
 								</tbody>
@@ -107,6 +115,13 @@
 		$(document).ready(function(){
 			$("select[name='pc_id']").on('change', function(){
 				$("form").submit();
+			});
+			$(".btn-del").on('click', function(){
+				var r = confirm('Are you sure you want to delete the record?');
+				if (r) {
+					$.get("delete-record.php?rid=" + $(this).data("id") + '&type=' + $(this).data("type"))
+						.done(function(){ location.reload(); });
+				}
 			});
 		});
 	</script>

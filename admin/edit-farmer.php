@@ -1,16 +1,23 @@
 <?php
 	include('../include/configuration.php');
 
-	if ($_POST['btn-submit']) {
-		$insertProduct = $dbh->prepare("insert into products(product_name, description, product_code, product_category_id, created_at, updated_at, user_id) values(:product_name, :description, :product_code, :product_category_id,  NOW(), NOW(), :user_id)");
-		$insertProduct->execute(array(
-				':product_name' => $_REQUEST['product_name'],
-				':description' => $_REQUEST['description'],
-				':product_code' => $_REQUEST['product_code'],
-				':product_category_id' => $_REQUEST['product_category_id'],
-				':user_id' => 1,
+	if (isset($_POST['btn-submit'])) {
+		$upFarmer = $dbh->prepare("update farmer_infos set first_name=:first_name, middle_name=:middle_name, last_name=:last_name, mobile_number=:mobile_number, telephone_number=:telephone_number, updated_at=NOW() where id = :fid");
+		$upFarmer->execute(array(
+				':first_name' => $_REQUEST['first_name'],
+				':middle_name' => $_REQUEST['middle_name'],
+				':last_name' => $_REQUEST['last_name'],
+				':mobile_number' => $_REQUEST['mobile_number'],
+				':telephone_number' => $_REQUEST['telephone_number'],
+				':fid' => $_REQUEST['fid'],
 			));
-		header("Location: list-products.php");
+		header("Location: list-farmers.php");
+	}
+
+	if ($_GET['fid']) {
+		$selFar = $dbh->prepare("select * from farmer_infos where id = :fid");
+		$selFar->execute(array( ':fid' =>$_GET['fid'], ));
+		$farmer = $selFar->fetch(PDO::FETCH_ASSOC);
 	}
 ?>
 <html>
@@ -41,19 +48,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						
-						<!-- <ul class="nav navbar-nav navbar-right">
-							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									Marc Caabay
-									(<small>Admin</small>)
-									<b class="caret"></b>
-								</a>
-								<ul class="dropdown-menu">
-									<li><a href="/admin/change-password"><span class="hidden-sm"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;&nbsp;&nbsp;</span>Change Password</a></li>
-									<li><a href="/logout"><span class="hidden-sm"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;&nbsp;</span>Sign Out</a></li>
-								</ul>
-							</li>
-						</ul> -->
+
 						<div class="pull-right">
 							<div class="dropdown">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -75,45 +70,42 @@
 				<div class="col-sm-6 col-sm-offset-3">
 					<div class="page-header" style="margin-top: 0">
 						<h3>
-							<a href="list-products.php">
+							<a href="list-farmers.php">
 								<span class="glyphicon glyphicon-chevron-left"></span>
 							</a>
-							Add New Product
+							Edit Farmer
 						</h3>
 					</div>
 					<form method="post" action="" class="form-horizontal">
+						<input type="hidden" name="fid" value="<?php echo $_GET['fid'] ?>"/>
 						<div class="form-group">
-							<label class="col-sm-3 control-label" for="product_name">Product Name</label>
+							<label class="col-sm-3 control-label" for="first_name">First Name</label>
 							<div class="col-sm-9">
-								<input id="product_name" type="text" class="form-control" name="product_name" />
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-3 control-label" for="product_code">Product Code</label>
-							<div class="col-sm-9">
-								<input id="product_code" type="text" class="form-control" name="product_code" />
+								<input id="first_name" type="text" class="form-control" name="first_name" value="<?php echo $farmer ? $farmer['first_name'] : '' ?>" />
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label" for="description">Description</label>
+							<label class="col-sm-3 control-label" for="middle_name">Middle Name</label>
 							<div class="col-sm-9">
-                              <textarea id="description" class="form-control" name="description"></textarea>
+								<input id="middle_name" type="text" class="form-control" name="middle_name" value="<?php echo $farmer ? $farmer['middle_name'] : '' ?>" />
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label" for="product_category_id">Category</label>
+							<label class="col-sm-3 control-label" for="last_name">Last Name</label>
 							<div class="col-sm-9">
-								<select id="product_category_id" name="product_category_id" class="form-control">
-									<?php
-										$selProdCat = $dbh->prepare("select * from product_categories");
-										$selProdCat->execute();
-
-										while($pc = $selProdCat->fetch()):
-									?>
-										<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
-									<?php endwhile; ?>
-								</select>
+								<input id="last_name" type="text" class="form-control" name="last_name" value="<?php echo $farmer ? $farmer['last_name'] : '' ?>" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label" for="mobile_number">Mobile Number</label>
+							<div class="col-sm-9">
+								<input id="mobile_number" type="text" class="form-control" name="mobile_number" value="<?php echo $farmer ? $farmer['mobile_number'] : '' ?>" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label" for="telephone_number">Telephone Number</label>
+							<div class="col-sm-9">
+								<input id="telephone_number" type="text" class="form-control" name="telephone_number" value="<?php echo $farmer ? $farmer['telephone_number'] : '' ?>" />
 							</div>
 						</div>
 						<div class="form-group col-sm-3 pull-right">
@@ -123,7 +115,6 @@
 				</div>
 			</div>
 		</div>
-
 		
 	</body>
 </html>

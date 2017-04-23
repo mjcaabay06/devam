@@ -93,6 +93,7 @@
 										<th>Description</th>
 										<th>Code</th>
 										<th>Added By</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -111,6 +112,14 @@
 										<td><?php echo $prod['description'] ?></td>
 										<td><?php echo $prod['product_code'] ?></td>
 										<td><?php echo $user['username'] ?></td>
+										<td>
+											<a href="edit-products.php?pid=<?php echo $prod['id'] ?>" class="btn btn-primary" data-id="">
+												<span class="glyphicon glyphicon-pencil"></span>
+											</a>
+											<button type="button" class="btn btn-primary btn-del" data-id="<?php echo $prod['id'] ?>" data-type="product">
+												<span class="glyphicon glyphicon-trash"></span>
+											</button>
+										</td>
 									</tr>
 									<?php endwhile; ?>
 								</tbody>
@@ -126,6 +135,14 @@
 		$(document).ready(function(){
 			$("select[name='pc_id']").on('change', function(){
 				$("form").submit();
+			});
+
+			$(".btn-del").on('click', function(){
+				var r = confirm('Are you sure you want to delete the record?');
+				if (r) {
+					$.get("delete-record.php?rid=" + $(this).data("id") + '&type=' + $(this).data("type"))
+						.done(function(){ location.reload(); });
+				}
 			});
 		});
 	</script>

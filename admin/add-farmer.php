@@ -11,6 +11,7 @@
 				':telephone_number' => $_REQUEST['telephone_number'],
 				':user_id' => 1,
 			));
+		header("Location: list-farmers.php");
 	}
 ?>
 <html>

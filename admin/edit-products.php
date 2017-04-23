@@ -2,15 +2,21 @@
 	include('../include/configuration.php');
 
 	if ($_POST['btn-submit']) {
-		$insertProduct = $dbh->prepare("insert into products(product_name, description, product_code, product_category_id, created_at, updated_at, user_id) values(:product_name, :description, :product_code, :product_category_id,  NOW(), NOW(), :user_id)");
-		$insertProduct->execute(array(
+		$updateProduct = $dbh->prepare("update products set product_name=:product_name, description=:description, product_code=:product_code, product_category_id=:product_category_id, updated_at=NOW() where id = :pid");
+		$updateProduct->execute(array(
 				':product_name' => $_REQUEST['product_name'],
 				':description' => $_REQUEST['description'],
 				':product_code' => $_REQUEST['product_code'],
 				':product_category_id' => $_REQUEST['product_category_id'],
-				':user_id' => 1,
+				':pid' => $_REQUEST['pid'],
 			));
 		header("Location: list-products.php");
+	}
+
+	if ($_GET['pid']) {
+		$selProd = $dbh->prepare("select * from products where id = :pid");
+		$selProd->execute(array( ':pid' =>$_GET['pid'], ));
+		$prod = $selProd->fetch(PDO::FETCH_ASSOC);
 	}
 ?>
 <html>
@@ -82,23 +88,24 @@
 						</h3>
 					</div>
 					<form method="post" action="" class="form-horizontal">
+						<input type="hidden" name="fid" value="<?php echo $_GET['pid'] ?>"/>
 						<div class="form-group">
 							<label class="col-sm-3 control-label" for="product_name">Product Name</label>
 							<div class="col-sm-9">
-								<input id="product_name" type="text" class="form-control" name="product_name" />
+								<input id="product_name" type="text" class="form-control" name="product_name" value="<?php echo $prod ? $prod['product_name'] : '' ?>" />
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-3 control-label" for="product_code">Product Code</label>
 							<div class="col-sm-9">
-								<input id="product_code" type="text" class="form-control" name="product_code" />
+								<input id="product_code" type="text" class="form-control" name="product_code" value="<?php echo $prod ? $prod['product_code'] : '' ?>" />
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="col-sm-3 control-label" for="description">Description</label>
 							<div class="col-sm-9">
-                              <textarea id="description" class="form-control" name="description"></textarea>
+                              <textarea id="description" class="form-control" name="description"><?php echo $prod ? $prod['description'] : '' ?></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -111,7 +118,7 @@
 
 										while($pc = $selProdCat->fetch()):
 									?>
-										<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
+										<option value="<?php echo $pc['id'] ?>" <?php echo $prod['product_category_id'] == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
 									<?php endwhile; ?>
 								</select>
 							</div>

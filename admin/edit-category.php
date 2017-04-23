@@ -1,13 +1,21 @@
 <?php
 	include('../include/configuration.php');
 
-	if ($_POST['btn-submit']) {
-		$insertProduct = $dbh->prepare("insert into product_categories(category_name, created_at, updated_at, user_id) values(:category_name, NOW(), NOW(), :user_id)");
-		$insertProduct->execute(array(
+	if (isset($_POST['btn-submit'])) {
+		$upCat = $dbh->prepare("update product_categories set category_name = :category_name, updated_at = NOW() where id = :cid");
+		$upCat->execute(array(
 				':category_name' => $_REQUEST['category_name'],
-				':user_id' => 1,
+				':cid' =>$_REQUEST['cid'],
 			));
+
 		header("Location: list-category.php");
+	}
+
+
+	if ($_GET['cid']) {
+		$selCat = $dbh->prepare("select * from product_categories where id = :cid");
+		$selCat->execute(array( ':cid' =>$_GET['cid'], ));
+		$cat = $selCat->fetch(PDO::FETCH_ASSOC);
 	}
 ?>
 <html>
@@ -64,14 +72,15 @@
 							<a href="list-category.php">
 								<span class="glyphicon glyphicon-chevron-left"></span>
 							</a>
-							Add New Category
+							Edit Category
 						</h3>
 					</div>
 					<form method="post" action="" class="form-horizontal">
+						<input type="hidden" name="cid" value="<?php echo $_GET['cid'] ?>"/>
 						<div class="form-group">
 							<label class="col-sm-3 control-label" for="category_name">Category Name</label>
 							<div class="col-sm-9">
-								<input id="category_name" type="text" class="form-control" name="category_name" />
+								<input id="category_name" type="text" class="form-control" name="category_name" value="<?php echo $cat ? $cat['category_name'] : '' ?>" />
 							</div>
 						</div>
 						<div class="form-group col-sm-3 pull-right">
