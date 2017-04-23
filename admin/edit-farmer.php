@@ -68,12 +68,12 @@
 						<div class="pull-right">
 							<div class="dropdown">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-						    		Marc Caabay (Admin)
+						    		<?php echo $_SESSION['username']; ?>
 						    		<span style="margin-left: 10px;margin-right: -5px;" class="caret"></span>
 						    	</button>
 						    	<ul class="dropdown-menu pull-right">
-						    		<li><a href="#"><span class="hidden-sm"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;&nbsp;&nbsp;</span>Change Password</a></li>
-									<li><a href="#"><span class="hidden-sm"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;&nbsp;</span>Sign Out</a></li>
+						    		<li class="hidden"><a href="#"><span class="hidden-sm"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;&nbsp;&nbsp;</span>Change Password</a></li>
+									<li><a href="logout.php"><span class="hidden-sm"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;&nbsp;</span>Sign Out</a></li>
 						    	</ul>
 					    	</div>
 						</div>

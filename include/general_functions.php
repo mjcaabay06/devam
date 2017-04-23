@@ -9,7 +9,8 @@ function checkLogin($username, $password){
 	$results = $chkLogin->fetch();
 
 	if(!empty($results)){
-		$_SESSION['AuthId'] = $results['id'];	
+		$_SESSION['AuthId'] = $results['id'];
+		$_SESSION['username'] = $results['username'];
 		$isAuthenticated = true;
 	}
 
