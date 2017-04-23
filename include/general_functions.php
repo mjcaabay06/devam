@@ -42,4 +42,14 @@ function sendViaSemaphore($parameters){
 	return json_decode($output);
 }
 
+function getMsgReceivers(){
+	global $dbh;	
+
+	$getData = $dbh->prepare("SELECT * FROM farmer_infos WHERE user_id = :user_id ");
+	$getData->execute(array(":user_id" => (int)$_SESSION['AuthId']));
+	$results = $getData->fetchAll(PDO::FETCH_ASSOC);
+
+	return $results;
+}
+
 ?>
