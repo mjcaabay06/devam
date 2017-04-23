@@ -1,4 +1,8 @@
 <?php
+if(!isset($_SESSION['AuthId']) || empty($_SESSION['AuthId'])){
+	header("Location: login.php");
+	exit;
+}else{
 	include('../include/configuration.php');
 
 	if ($_POST['btn-submit']) {
@@ -13,6 +17,7 @@
 			));
 		header("Location: list-farmers.php");
 	}
+}
 ?>
 <html>
 	<head>

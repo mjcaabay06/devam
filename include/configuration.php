@@ -2,7 +2,7 @@
 /** the Database Information **/
 $hostname = 'localhost';
 $username = 'root';
-$password = 'mvc456$';
+$password = '';
 $dbname = 'devam_db';
 $driver = 'mysql';
 try{
@@ -12,4 +12,6 @@ try{
 }
 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
+$errorMessage = "";
 ?>
