@@ -63,10 +63,48 @@ if(!isset($_SESSION['AuthId']) || empty($_SESSION['AuthId'])){
 		</nav>
 		<div class="container main-container">
 			<div class="row">
-				<div class="col-sm-12">
-					asdaa
+				<div class="col-sm-6 col-sm-offset-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2>Send SMS Message</h2>
+						</div>
+						<div class="panel-body">
+							<form method="post" action="">
+								<div class="form-group msg-user">
+									<textarea class="form-control" name="message" id="msg" style="resize: none;height: 200px;margin-bottom: 20px;">Hi! We just want to inform you about our new system that will surely help your business! You can send us keyword to check the status of a product in International Market. Send us the keyword using this format: CMP<Product><CountryCode> Example: CMPRiceJP&#13;&#10;&#13;&#10;List of Crops you can check:&#13;&#10;Rice&#13;&#10;Sugar&#13;&#10;Coconuts&#13;&#10;Abaca&#13;&#10;Fruit&#13;&#10;Corn&#13;&#10;Rubber&#13;&#10;&#13;&#10;Country:&#13;&#10;Japan - JP&#13;&#10;United States - US&#13;&#10;&#13;&#10;We hope for your success! Have a great day!</textarea>
+								</div>
+								<div class="form-group col-sm-4 pull-right">
+									<div class="row">
+										<input type="button" onclick="sendmsg();" name="btn-submit" value="Send them a message" class="form-control btn btn-primary msg-user-btn" />
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!-- <div class="panel panel-default">
+						<div class="panel-body" id="sndmsg-dv">
+							<form method="post" action="">
+								<div class="msg-user">
+									<textarea class="form-control" name="message" id="msg" style="resize: none;height: 200px;margin-bottom: 20px;">Hi! We just want to inform you about our new system that will surely help your business! You can send us keyword to check the status of a product in International Market. Send us the keyword using this format: CMP<Product><CountryCode> Example: CMPRiceJP&#13;&#10;&#13;&#10;List of Crops you can check:&#13;&#10;Rice&#13;&#10;Sugar&#13;&#10;Coconuts&#13;&#10;Abaca&#13;&#10;Fruit&#13;&#10;Corn&#13;&#10;Rubber&#13;&#10;&#13;&#10;Country:&#13;&#10;Japan - JP&#13;&#10;United States - US&#13;&#10;&#13;&#10;We hope for your success! Have a great day!</textarea>
+								</div>
+								<div class="btn msg-user-btn" onclick="sendmsg();">Send them a message</div>
+							</form>
+						</div>
+					</div> -->
 				</div>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		function sendmsg(){
+			$.ajax({
+				url: "send_oneway.php",
+				type: "post",
+				data: {action:"sendmsg", message: encodeURIComponent($("#msg").val())},
+				success: function(response){
+					$("#sndmsg-dv").html(response);
+				}
+			});
+		}
+	</script>
 </html>

@@ -30,15 +30,15 @@
 		<![endif]-->
 	</head>
 	<body>
-<!-- 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-12">
-						asd
+						
 					</div>
 				</div>
 			</div>
-		</nav> -->
+		</nav>
 		<div class="container main-container">
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3">
