@@ -1,4 +1,5 @@
 <?php
+//
 session_start();
 include("../include/configuration.php");
 include("../include/general_functions.php");

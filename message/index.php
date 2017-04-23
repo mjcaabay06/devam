@@ -1,4 +1,5 @@
 <?php
+//
 session_start();
 
 if(!isset($_SESSION['AuthId']) || empty($_SESSION['AuthId'])){
