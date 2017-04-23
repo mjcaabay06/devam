@@ -55,7 +55,7 @@
 					    		<label class="control-label" style="text-transform: none; color: black;">&nbsp;&nbsp;&nbsp;&nbsp;Search Product: </label>
 					    	</div>
 							<div class="form-group">
-								<input type="text" class="form-control" name="query" placeholder="Name or Code" value="<?php echo $_GET['query'] ? $_GET['query'] : '' ?>" />
+								<input type="text" class="form-control" name="query" placeholder="Name or Code" value="<?php echo isset($_GET['query']) ? $_GET['query'] : '' ?>" />
 				    			<button type="submit" value="Search" class="btn btn-primary">
 									<span class="glyphicon glyphicon-search"></span>
 								</button>
@@ -91,7 +91,7 @@
 									<?php
 										$where = '';
 										$and = '';
-										$query = $_GET['query'] ? " product_name LIKE '%" . $_GET['query'] . "%' " : '';
+										$query = isset($_GET['query']) ? " product_name LIKE '%" . $_GET['query'] . "%' " : '';
 
 										if ($pcid != 0 || $query != '') {
 											$where = ' where ';
