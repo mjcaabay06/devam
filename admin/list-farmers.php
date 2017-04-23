@@ -1,12 +1,11 @@
 <?php
 	include('../include/configuration.php');
 
-	if ($_POST['btn-submit']) {
-		$insertProduct = $dbh->prepare("insert into product_categories(category_name, created_at, updated_at, user_id) values(:category_name, NOW(), NOW(), :user_id)");
-		$insertProduct->execute(array(
-				':category_name' => $_REQUEST['category_name'],
-				':user_id' => 1,
-			));
+	$isSelected = false;
+	$pcid = 1;
+	if (isset($_GET['pc_id'])) {
+		$isSelected = true;
+		$pcid = $_GET['pc_id'];
 	}
 ?>
 <html>
@@ -57,28 +56,58 @@
 		</nav>
 		<div class="container main-container">
 			<div class="row">
-				<div class="col-sm-6 col-sm-offset-3">
-					<div class="page-header" style="margin-top: 0">
-						<h3>
-							<a href="list-category.php">
-								<span class="glyphicon glyphicon-chevron-left"></span>
-							</a>
-							Add New Category
-						</h3>
+				<div class="col-sm-12">
+					<div class="page-header">
+						<h1>FARMERS</h1>
 					</div>
-					<form method="post" action="" class="form-horizontal">
-						<div class="form-group">
-							<label class="col-sm-3 control-label" for="category_name">Category Name</label>
-							<div class="col-sm-9">
-								<input id="category_name" type="text" class="form-control" name="category_name" />
+					<form action="" method="get">
+						<div class="form-inline pull-right">
+							<div class="form-group">
+								<a href="add-farmer.php" class="btn btn-default">Add Farmer</a>
 							</div>
 						</div>
-						<div class="form-group col-sm-3 pull-right">
-							<input type="submit" name="btn-submit" value="Save" class="form-control btn btn-primary" />
+
+						<div class="form-group">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Name</th>
+										<th>Contact Number</th>
+										<th>Added By</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php 
+										$selProd = $dbh->prepare('select * from farmer_infos');
+										$selProd->execute();
+
+										while($prod = $selProd->fetch()):
+											$selUser = $dbh->prepare('select * from users where id = :user_id');
+											$selUser->execute(array( ':user_id' => $prod['user_id'] ));
+											$user = $selUser->fetch(PDO::FETCH_ASSOC);
+									?>
+									<tr>
+										<td><?php echo $prod['id'] ?></td>
+										<td><?php echo $prod['last_name'] . ', ' . $prod['first_name'] ?></td>
+										<td><?php echo $prod['mobile_number'] . ' / ' . $prod['telephone_number'] ?></td>
+										<td><?php echo $user['username'] ?></td>
+									</tr>
+									<?php endwhile; ?>
+								</tbody>
+							</table>
 						</div>
+						
 					</form>
 				</div>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("select[name='pc_id']").on('change', function(){
+				$("form").submit();
+			});
+		});
+	</script>
 </html>

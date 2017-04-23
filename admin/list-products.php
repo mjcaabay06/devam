@@ -18,8 +18,10 @@
 
 		<!-- Bootstrap -->
 		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/custom.css" rel="stylesheet">
 
 		<script src="../js/jquery-3.2.0.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,45 +31,96 @@
 		<![endif]-->
 	</head>
 	<body>
-		<form action="" method="get">
-			<select name="pc_id">
-				<?php
-					$selProdCat = $dbh->prepare("select * from product_categories");
-					$selProdCat->execute();
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-12">
+						
 
-					while($pc = $selProdCat->fetch()):
-				?>
-					<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
-				<?php endwhile; ?>
-			</select>
 
-			<a href="add-category.php" class="pull-right btn btn-primary">Add Category</a>
-			<a href="add-products.php" class="pull-right btn btn-primary">Add Product</a>
+						<div class="pull-right">
+							<div class="dropdown">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						    		Marc Caabay (Admin)
+						    		<span style="margin-left: 10px;margin-right: -5px;" class="caret"></span>
+						    	</button>
+						    	<ul class="dropdown-menu pull-right">
+						    		<li><a href="#"><span class="hidden-sm"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;&nbsp;&nbsp;</span>Change Password</a></li>
+									<li><a href="#"><span class="hidden-sm"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;&nbsp;</span>Sign Out</a></li>
+						    	</ul>
+					    	</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<div class="container main-container">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="page-header">
+						<h1>PRODUCTS</h1>
+					</div>
+					<form action="" method="get">
+						<div class="form-group pull-left">
+							<select name="pc_id" class="form-control">
+								<?php
+									$selProdCat = $dbh->prepare("select * from product_categories");
+									$selProdCat->execute();
 
-			<table class="table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Product Name</th>
-						<th>Code</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php 
-						$selProd = $dbh->prepare('select * from products where product_category_id = :pid');
-						$selProd->execute(array( 'pid' => $pcid ));
+									while($pc = $selProdCat->fetch()):
+								?>
+									<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
+								<?php endwhile; ?>
+							</select>	
+						</div>
+						
+						
+						<div class="form-inline pull-right">
+							<div class="form-group">
+								<a href="add-products.php" class="btn btn-default">Add Product</a>
+							</div>
+							<!-- <div class="form-group">
+								<a href="add-category.php" class="btn btn-default">Add Category</a>
+							</div> -->
+						</div>
 
-						while($prod = $selProd->fetch()):
-					?>
-					<tr>
-						<td><?php echo $prod['id'] ?></td>
-						<td><?php echo $prod['product_name'] ?></td>
-						<td><?php echo $prod['product_code'] ?></td>
-					</tr>
-					<?php endwhile; ?>
-				</tbody>
-			</table>
-		</form>
+						<div class="form-group">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Product Name</th>
+										<th>Description</th>
+										<th>Code</th>
+										<th>Added By</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php 
+										$selProd = $dbh->prepare('select * from products where product_category_id = :pid');
+										$selProd->execute(array( ':pid' => $pcid ));
+
+										while($prod = $selProd->fetch()):
+											$selUser = $dbh->prepare('select * from users where id = :user_id');
+											$selUser->execute(array( ':user_id' => $prod['user_id'] ));
+											$user = $selUser->fetch(PDO::FETCH_ASSOC);
+									?>
+									<tr>
+										<td><?php echo $prod['id'] ?></td>
+										<td><?php echo $prod['product_name'] ?></td>
+										<td><?php echo $prod['description'] ?></td>
+										<td><?php echo $prod['product_code'] ?></td>
+										<td><?php echo $user['username'] ?></td>
+									</tr>
+									<?php endwhile; ?>
+								</tbody>
+							</table>
+						</div>
+						
+					</form>
+				</div>
+			</div>
+		</div>
 	</body>
 	<script type="text/javascript">
 		$(document).ready(function(){

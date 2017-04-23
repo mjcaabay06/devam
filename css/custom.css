@@ -1,0 +1,77 @@
+body{
+	font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 13px !important;
+}
+table, .btn{
+	font-size: 13px !important;
+}
+h1{
+	font-weight: bolder;
+    font-size: 25px;
+    color: #d0112b;
+}
+.page-header{
+	padding-bottom: 0;
+	margin-top: 0;
+}
+.navbar-inverse-red {
+    background: #fff;
+    border-bottom: #d0112b solid 5px;
+    z-index: 1040;
+}
+
+.main-container{
+	margin-top: 70px;
+}
+
+
+/*ADMIN*/
+.navbar-default{
+	background-color: #333;
+	border-bottom: 5px solid rgba(0, 0, 0, 0.3);
+	border-color: #d0112b;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	color: #fff;
+}
+.btn-default.dropdown-toggle{
+	height: 45px;
+	color: #fff;
+	border: 0;
+	background-color: #333;
+}
+.btn-default.dropdown-toggle:hover,
+.btn-default.dropdown-toggle:focus,
+.dropdown.open .btn-default.dropdown-toggle{
+	background-color: #272727;
+	color: #fff;
+}
+.dropdown ul.dropdown-menu{
+	margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    margin-right: -1;
+    background: #333;
+    font-size: 13px;
+}
+.dropdown ul.dropdown-menu li a:hover{
+	background-color: #272727;
+}
+.dropdown ul.dropdown-menu li a{
+	color: #fff;
+}
+
+.btn-default{
+	color: #333;
+	background-color: #d3d3d3;
+	border-color: #bbb;
+}
+.btn-primary,
+.btn-default{
+	border-radius: 0;
+}
+
+.control-label{
+	font-weight: normal;
+	text-align: left !important;
+}

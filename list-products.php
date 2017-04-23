@@ -18,6 +18,7 @@
 
 		<!-- Bootstrap -->
 		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/custom.css" rel="stylesheet">
 
 		<script src="js/jquery-3.2.0.min.js"></script>
 		<script src="js/bootstrap.js"></script>
@@ -32,43 +33,67 @@
 		<![endif]-->
 	</head>
 	<body>
-		<form action="" method="get">
-			<select name="pc_id">
-				<?php
-					$selProdCat = $dbh->prepare("select * from product_categories");
-					$selProdCat->execute();
+		<nav class="navbar navbar-inverse navbar-inverse-red navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						aaa
+					</div>
+				</div>
+			</div>
+		</nav>
 
-					while($pc = $selProdCat->fetch()):
-				?>
-					<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
-				<?php endwhile; ?>
-			</select>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Product Name</th>
-						<th>Code</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php 
-						$selProd = $dbh->prepare('select * from products where product_category_id = :pid');
-						$selProd->execute(array( 'pid' => $pcid ));
+		<div class="container main-container">
+			<div class="row">
+				<div class="col-sm-12">
+					<form action="" method="get">
+						<div class="form-group pull-left">
+							<select name="pc_id" class="form-control">
+								<?php
+									$selProdCat = $dbh->prepare("select * from product_categories");
+									$selProdCat->execute();
 
-						while($prod = $selProd->fetch()):
-					?>
-					<tr>
-						<td><?php echo $prod['id'] ?></td>
-						<td><?php echo $prod['product_name'] ?></td>
-						<td><?php echo $prod['product_code'] ?></td>
-						<td><button type="button" data-code="<?php echo $prod['product_code'] ?>" data-id="<?php echo $prod['id'] ?>" class="btn-modal btn btn-primary"><span class="glyphicon glyphicon-refresh gly-spin hidden"></span><span class="glyphicon glyphicon-search"></span></button></td>
-					</tr>
-					<?php endwhile; ?>
-				</tbody>
-			</table>
-		</form>
+									while($pc = $selProdCat->fetch()):
+								?>
+									<option value="<?php echo $pc['id'] ?>" <?php echo $pcid == $pc['id'] ? 'selected' : ''; ?>><?php echo $pc['category_name'] ?></option>
+								<?php endwhile; ?>
+							</select>
+						</div>
+						
+						<div class="form-group">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Product Name</th>
+										<th>Description</th>
+										<th>Code</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php 
+										$selProd = $dbh->prepare('select * from products where product_category_id = :pid');
+										$selProd->execute(array( 'pid' => $pcid ));
+
+										while($prod = $selProd->fetch()):
+									?>
+									<tr>
+										<td><?php echo $prod['id'] ?></td>
+										<td><?php echo $prod['product_name'] ?></td>
+										<td><?php echo $prod['description'] ?></td>
+										<td><?php echo $prod['product_code'] ?></td>
+										<td><button type="button" data-code="<?php echo $prod['product_code'] ?>" data-id="<?php echo $prod['id'] ?>" class="btn-modal btn btn-primary"><span class="glyphicon glyphicon-refresh gly-spin hidden"></span><span class="glyphicon glyphicon-search"></span></button></td>
+									</tr>
+									<?php endwhile; ?>
+								</tbody>
+							</table>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
 
 		<div id="modalPrice" class="modal fade" role="dialog">
 			<div class="modal-dialog">
