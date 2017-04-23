@@ -2,7 +2,7 @@
 /** the Database Information **/
 $hostname = 'localhost';
 $username = 'root';
-$password = '';
+$password = 'mvc456$';
 $dbname = 'devam_db';
 $driver = 'mysql';
 try{

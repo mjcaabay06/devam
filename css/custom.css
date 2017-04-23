@@ -34,6 +34,10 @@ h1{
 	background-clip: padding-box;
 	color: #fff;
 }
+.navbar-nav>li>a,
+.navbar-nav:hover{
+	color: #fff !important;
+}
 .btn-default.dropdown-toggle{
 	height: 45px;
 	color: #fff;
@@ -42,8 +46,10 @@ h1{
 }
 .btn-default.dropdown-toggle:hover,
 .btn-default.dropdown-toggle:focus,
-.dropdown.open .btn-default.dropdown-toggle{
-	background-color: #272727;
+.dropdown.open .btn-default.dropdown-toggle,
+.navbar-nav:hover,
+.navbar-nav li.act{
+	background-color: #272727 !important;
 	color: #fff;
 }
 .dropdown ul.dropdown-menu{
