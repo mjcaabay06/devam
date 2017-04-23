@@ -12,4 +12,6 @@ try{
 }
 $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 $dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+
+$errorMessage = "";
 ?>

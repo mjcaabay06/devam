@@ -1,54 +1,71 @@
 <?php
-include("../include/configuration.php");
 session_start();
+include("../include/configuration.php");
+include("../include/general_functions.php");
 
 if($_POST){
-	if(checkLogin($_POST['username'], $_POST['passwd'])){
-		header("Location: admin/");		
+	if(checkLogin($_POST['username'], $_POST['password'])){
+		header("Location: ./");		
 	}else{		
-		echo "You are not authenticated.";
+		$errorMessage = "You are not authenticated.";
 	}
-}
-
-function checkLogin($username, $password){
-	global $dbh;	
-	$isAuthenticated = false;
-
-	$chkLogin = $dbh->prepare("SELECT * FROM users WHERE username = :uname AND password = :pass AND user_type_id = 1");
-	$chkLogin->execute(array(":uname" => $username, ":pass" => base64_decode($password)));
-	$results = $chkLogin->fetch();
-
-	if(!empty($results)){
-		$_SESSION['AuthId'] = $results['id'];	
-		$isAuthenticated = true;
-	}
-
-	return $isAuthenticated;
 }
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<title>DevAm</title>
+		<link href="../css/bootstrap.min.css" rel="stylesheet">
+		<link href="../css/custom.css" rel="stylesheet">
 		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
 	</head>
 	<body>
-		<div class="container">
-			<div class="row">	
-				<form id="frmlogin" action="" method="post" style="width:500px;margin: 0 auto;">
-					<input type="hidden" name="action" value="addmsg"/>
-					<div class="form-group">
-						<input class="form-control" type="text" name="username" id="username" placeholder="Username" />
+<!-- 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						asd
 					</div>
-					<div class="form-group">
-						<input class="form-control" type="text" name="password" id="password" placeholder="Password" />
+				</div>
+			</div>
+		</nav> -->
+		<div class="container main-container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2>User Login</h2>
+						</div>
+						<div class="panel-body">
+							<?php if($errorMessage != ''){?>	
+								<div style="background-color: #d81717;color: #fff;margin-bottom: 12px;padding: 3px 9px;">
+									<?=$errorMessage;?>
+								</div>
+							<?php } ?>
+							<form id="frmlogin" action="" method="post">
+								<div class="form-group">
+									<input type="text" class="form-control" name="username" placeholder="Username" />
+								</div>
+								<div class="form-group">
+									<input type="password" class="form-control" name="password" placeholder="Password" />
+								</div>
+								<div class="form-group col-sm-3 pull-right">
+								<div class="row">
+									<input type="submit" name="btn-submit" value="Login" class="form-control btn btn-primary" />
+								</div>
+							</div>
+							</form>
+						</div>
 					</div>
-					<div class="form-group">
-						<input class="form-control btn" type="submit" id="sublogin" value="Send" />
-					</div>	
-				</form>
+				</div>
 			</div>
 		</div>
 	</body>
@@ -64,3 +81,4 @@ function checkLogin($username, $password){
 		});
 	</script>
 </html>
+
