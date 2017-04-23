@@ -11,7 +11,7 @@ if($_POST){
 			$getReceivers = getMsgReceivers();
 			$parameters = array(
 			    //'apikey' => 'eb8d6ed63c89ee953de368b110328f18', //API KEY
-			    'apikey' => '544da9805f3e16674cb81361a29dec43',
+			    'apikey' => '25cf655e21f92242273a6fee5692732d',
 			    'message' => urldecode($_POST['message']),
 			    'sendername' => 'SEMAPHORE'
 			);
@@ -46,7 +46,7 @@ if($_POST){
 			$getReceivers = getMsgReceivers();
 			$parameters = array(
 			    //'apikey' => 'eb8d6ed63c89ee953de368b110328f18', //API KEY
-			    'apikey' => '544da9805f3e16674cb81361a29dec43',
+			    'apikey' => '25cf655e21f92242273a6fee5692732d',
 			    'number' => trim($_POST['phone']),
 			    'message' => urldecode($_POST['message']),
 			    'sendername' => 'SEMAPHORE'
