@@ -3,9 +3,14 @@
 
 	$isSelected = false;
 	$pcid = 0;
+	$query = '';
 	if (isset($_GET['pc_id'])) {
 		$isSelected = true;
 		$pcid = $_GET['pc_id'];
+	}
+
+	if (isset($_GET['query'])){
+		$query = $_GET['query'];
 	}
 
 	
@@ -91,7 +96,7 @@
 									<?php
 										$where = '';
 										$and = '';
-										$query = isset($_GET['query']) ? " product_name LIKE '%" . $_GET['query'] . "%' " : '';
+										$query = $query ? " product_name LIKE '%" . $_GET['query'] . "%' " : '';
 
 										if ($pcid != 0 || $query != '') {
 											$where = ' where ';
