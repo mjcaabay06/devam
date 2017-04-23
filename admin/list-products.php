@@ -134,6 +134,10 @@
 											<button type="button" class="btn btn-primary btn-del" data-id="<?php echo $prod['id'] ?>" data-type="product">
 												<span class="glyphicon glyphicon-trash"></span>
 											</button>
+											<button type="button" class="btn btn-primary btn-send" data-code="<?php echo $prod['product_code'] ?>" data-id="<?php echo $prod['id'] ?>" data-type="product">
+												<span class="glyphicon glyphicon-send"></span>
+												<span class="glyphicon glyphicon-refresh gly-spin hidden">
+											</button>
 										</td>
 									</tr>
 									<?php endwhile; ?>
@@ -143,6 +147,44 @@
 						
 					</form>
 				</div>
+			</div>
+		</div>
+
+		<div id="modalPrice" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-sm">
+
+			<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Send Market Value</h4>
+					</div>
+					<div class="modal-body">
+						<div class="col-sm-12">
+							<div class="row">
+								<div class="form-group" id="product_name">
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12">
+										<div class="row">
+											<textarea class="hidden" id="sms-content"></textarea>
+											<input id="mobileno" type="text" class="form-control" placeholder="Enter Mobile Number" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="clear: both"></div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-sm-3 pull-right">
+							<div class="row">
+								<button type="button" class="btn btn-primary msg-user-btn" onclick="sendmsg();">Send</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</body>
@@ -159,6 +201,100 @@
 						.done(function(){ location.reload(); });
 				}
 			});
+
+			$(".btn-send").on('click', function(){
+				$(".btn-send span.glyphicon-send").addClass("hidden");
+				$(".btn-send span.glyphicon-refresh").removeClass("hidden");
+				fetchValue($(this).data('code'));
+			});
 		});
+		function sendmsg(){
+			$.ajax({
+				url: "send_oneway.php",
+				type: "post",
+				data: {action:"sendsnglmsg", message: encodeURIComponent($("#sms-content").val()), phone: $("#mobileno").val()},
+				success: function(response){
+					console.log(response);//$("#sndmsg-dv").html(response);
+				}
+			});
+		}
+		function fetchValue(code) {
+			var url = "https://www.quandl.com/api/v3/datasets/";
+			var product_code = code;
+			var fullUrl = url + product_code + '.json?' + dateFilter() + '&api_key=v_AVA5kuHqzsnG2XwsiK';
+			$(this).children("span.glyphicon-search").addClass("hidden");
+			$(this).children("span.glyphicon-refresh").removeClass("hidden");
+
+			$.get(fullUrl)
+				.done(function(data){
+					var hasValue = false;
+					var indexVal = 0;
+					for(var x = 0; x < data.dataset.column_names.length; x++) {
+						var cn = data.dataset.column_names[x];
+						if (cn == "Value" || cn == "Last") {
+							indexVal = x;
+							hasValue = true;
+							break;
+						}
+					}
+					var val = hasValue ? data.dataset.data[0][indexVal] : 0;
+					$("#modalPrice #product_name").html('<h3>' + data.dataset.name + ' (' + val + ') </h3>');
+					$("#sms-content").html('The amount of ' + data.dataset.name + ' as of ' + data.dataset.data[0][0] + ' is cost $' + val + '.');
+					
+					$(".btn-send span.glyphicon-send").removeClass("hidden");
+					$(".btn-send span.glyphicon-refresh").addClass("hidden");
+					
+					// $("#modalPrice .modal-title").html(data.dataset.name);
+
+					// var html = '';
+					// var prod;
+					// html += '<table class="table">'
+					// 		+ '<thead>'
+					// 		+ '<tr>'
+					// 		+ '<td>Price</td>'
+					// 		+ '<td>As Of</td>'
+					// 		+ '</tr>'
+					// 		+ '</thead>'
+					// 		+ '<tbody>';
+
+					// var hasValue = false;
+					// var indexVal = 0;
+					// for(var x = 0; x < data.dataset.column_names.length; x++) {
+					// 	var cn = data.dataset.column_names[x];
+					// 	if (cn == "Value" || cn == "Last") {
+					// 		indexVal = x;
+					// 		hasValue = true;
+					// 		break;
+					// 	}
+					// }
+
+					// if(hasValue) {
+					// 	for(prod in data.dataset.data) {
+					// 		html += '<tr><td>' + data.dataset.data[prod][x] + '</td><td>' + data.dataset.data[prod][0] + '</td></tr>';
+					// 	}
+					// 	$("#modalPrice .modal-body").html(html);
+					// }
+
+
+					$("#modalPrice").modal('show');
+
+
+				});
+		}
+
+		function dateFilter() {
+			var d = new Date();
+			var m = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : "0" + (d.getMonth() + 1);
+			var y = d.getFullYear();
+
+			var endDate = y + '-' + m + '-' + d.getDate();
+			d.setMonth(d.getMonth() - 5);
+
+			m = (d.getMonth() + 1) > 9 ? (d.getMonth() + 1) : "0" + (d.getMonth() + 1);
+			y = d.getFullYear();
+			var startDate = y + '-' + m + '-' + d.getDate();
+
+			return "start_date=" + startDate + "&end_date=" + endDate + '&collapse=monthly';
+		}
 	</script>
 </html>

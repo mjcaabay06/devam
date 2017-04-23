@@ -11,7 +11,7 @@ if($_POST){
 			$getReceivers = getMsgReceivers();
 			$parameters = array(
 			    //'apikey' => 'eb8d6ed63c89ee953de368b110328f18', //API KEY
-			    'apikey' => '5fba8ff3f13680b72a029080e0d3a96e',
+			    'apikey' => '544da9805f3e16674cb81361a29dec43',
 			    'message' => urldecode($_POST['message']),
 			    'sendername' => 'SEMAPHORE'
 			);
@@ -35,6 +35,35 @@ if($_POST){
 					$mnumbers .= $mobileNumber."<br/>";
 				}
 				echo "<h4>There was an error sending text message to the following mobile numbers:</h4><br/>".$mnumbers;
+				if($diffError != ''){
+					echo "<br/><br/>Reason:<br/>".$diffError;
+				}	
+			}
+		break;
+		case 'sendsnglmsg':
+			$errorSending = array();
+			$diffError = '';
+			$getReceivers = getMsgReceivers();
+			$parameters = array(
+			    //'apikey' => 'eb8d6ed63c89ee953de368b110328f18', //API KEY
+			    'apikey' => '544da9805f3e16674cb81361a29dec43',
+			    'number' => trim($_POST['phone']),
+			    'message' => urldecode($_POST['message']),
+			    'sendername' => 'SEMAPHORE'
+			);
+			$response = sendViaSemaphore($parameters);
+
+			if(empty($response) || !isset($response[0]->status)){
+				if(isset($response[0])){ //different error
+					$diffError = $response[0];
+				}
+				$errorSending = $_POST['phone'];
+			}
+			
+			if(empty($errorSending)){
+				echo "<div style='text-align:center;'><h1>Message Sent!</h1></div>";
+			}else{
+				echo "<h4>There was an error sending text message tO:</h4><br/>".$errorSending;
 				if($diffError != ''){
 					echo "<br/><br/>Reason:<br/>".$diffError;
 				}	
